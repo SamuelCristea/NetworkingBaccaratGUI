@@ -6,7 +6,8 @@ public class MainController {
 	}
 	
 	public void getMessage() {
-		clientConnection.send(c1.getText()); c1.clear();
+//		clientConnection.send(c1.getText()); 
+//		c1.clear();
 	}
 	
 

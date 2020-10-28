@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -39,6 +41,16 @@ public class GuiBaccarat extends Application{
 	@FXML
 	ListView<String> ServerView;
 	
+	@FXML
+	ToggleButton pwrButton;
+	
+	@FXML
+	TextField ServerPortNum;
+	
+	boolean wasPwrButtonPressed = false;
+	boolean prevPortUsed = false;
+	String pn;
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -48,8 +60,8 @@ public class GuiBaccarat extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		Parent root = FXMLLoader.load(getClass().getResource("main.FXML"));
-		Scene scene = new Scene(root, 500, 300); 
+		Parent root = FXMLLoader.load(getClass().getResource("ServerSideGUI.FXML"));
+		Scene scene = new Scene(root, 456, 400); 
 		primaryStage.setTitle("Baccarat");
 		primaryStage.setScene(scene);
 		
@@ -58,109 +70,57 @@ public class GuiBaccarat extends Application{
 		listItems = new ListView<String>();
 		listItems2 = new ListView<String>();
 		ServerView = new ListView<String>();
+		pwrButton = new ToggleButton();
 		
+		
+		
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+	}
+	
+	//changes the text on the power button and sets the server to listen to a specific port
+	public void changePowerText() {
+		
+		if (wasPwrButtonPressed) {//server was turned off by user
+			
+			pwrButton.setText("Turn Server On");
+			wasPwrButtonPressed = false;
+			
+		} else {//server was turned on by user
+			
+			//verify that it isnt an empty string passed through
+			if (ServerPortNum.getText() != "") {
+				pwrButton.setText("Turn Server Off");
+				pn = ServerPortNum.getText();
+				//verify that the port number is set within correct bounds
+				if (Integer.parseInt(pn) > 65535 || Integer.parseInt(pn) < 0) {
+					ErrorBox e = new ErrorBox(2);
+				} else {
+					serverOpen();
+					wasPwrButtonPressed = true;
+				}
+				
+			} else {
+				ErrorBox e = new ErrorBox(1);
+			}
+		}
+	}
+	
+	//pops open the server to connect to a specific port
+	private void serverOpen() {
+		int p = Integer.parseInt(pn);
 		serverConnection = new Server(data -> {
 			Platform.runLater(()->{
 				ServerView.getItems().add(data.toString());
 			});
 
-		});
-		
-		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-		/*
-		primaryStage.setTitle("The Networked Client/Server GUI Example");
-		
-		this.serverChoice = new Button("Server");
-		this.serverChoice.setStyle("-fx-pref-width: 300px");
-		this.serverChoice.setStyle("-fx-pref-height: 300px");
-		
-		this.serverChoice.setOnAction(e->{ primaryStage.setScene(sceneMap.get("server"));
-											primaryStage.setTitle("This is the Server");
-				serverConnection = new Server(data -> {
-					Platform.runLater(()->{
-						listItems.getItems().add(data.toString());
-					});
-
-				});
-											
-		});
-		
-		
-		this.clientChoice = new Button("Client");
-		this.clientChoice.setStyle("-fx-pref-width: 300px");
-		this.clientChoice.setStyle("-fx-pref-height: 300px");
-		
-		this.clientChoice.setOnAction(e-> {primaryStage.setScene(sceneMap.get("client"));
-											primaryStage.setTitle("This is a client");
-											clientConnection = new Client(data->{
-							Platform.runLater(()->{listItems2.getItems().add(data.toString());
-											});
-							});
-							
-											clientConnection.start();
-		});
-		
-		this.buttonBox = new HBox(400, serverChoice, clientChoice);
-		startPane = new BorderPane();
-		startPane.setPadding(new Insets(70));
-		startPane.setCenter(buttonBox);
-		
-		startScene = new Scene(startPane, 800,800);
-		
-		listItems = new ListView<String>();
-		listItems2 = new ListView<String>();
-		
-		c1 = new TextField();
-		b1 = new Button("Send");
-		b1.setOnAction(e->{clientConnection.send(c1.getText()); c1.clear();});
-		
-		sceneMap = new HashMap<String, Scene>();
-		
-		sceneMap.put("server",  createServerGui());
-		sceneMap.put("client",  createClientGui());
-		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-		
-		 
-		
-		primaryStage.setScene(startScene);
-		primaryStage.show();
-		
-	}
-	
-	public Scene createServerGui() {
-		
-		BorderPane pane = new BorderPane();
-		pane.setPadding(new Insets(70));
-		pane.setStyle("-fx-background-color: coral");
-		
-		pane.setCenter(listItems);
-	
-		return new Scene(pane, 500, 400);
-		
-		
-	}
-	
-	public Scene createClientGui() {
-		
-		clientBox = new VBox(10, c1,b1,listItems2);
-		clientBox.setStyle("-fx-background-color: blue");
-		return new Scene(clientBox, 400, 300);
-		
-	}*/
-
+		},p);
 	}
 }

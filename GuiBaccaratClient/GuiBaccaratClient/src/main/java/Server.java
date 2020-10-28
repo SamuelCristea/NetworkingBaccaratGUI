@@ -19,6 +19,7 @@ public class Server{
 	ArrayList<ClientThread> clients = new ArrayList<ClientThread>();
 	TheServer server;
 	private Consumer<Serializable> callback;
+	Integer portnum;
 	
 	
 	Server(Consumer<Serializable> call){
@@ -41,6 +42,7 @@ public class Server{
 		
 				ClientThread c = new ClientThread(mysocket.accept(), count);
 				callback.accept("client has connected to server: " + "client #" + count);
+				System.out.println("client has connected to server: " + "client #" + count);
 				clients.add(c);
 				c.start();
 				

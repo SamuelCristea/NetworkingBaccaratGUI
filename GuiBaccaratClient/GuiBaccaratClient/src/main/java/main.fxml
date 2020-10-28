@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="275.0" prefWidth="303.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GuiBaccaratClient">
+<VBox prefHeight="275.0" prefWidth="303.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GuiBaccaratClient">
   <children>
     <MenuBar maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="300.0" VBox.vgrow="NEVER">
       <menus>
@@ -53,10 +53,10 @@
     </MenuBar>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="ConnectButton" layoutX="120.0" layoutY="175.0" mnemonicParsing="false" onAction="#getMessage" text="Connect" />
+            <Button fx:id="ConnectButton" layoutX="120.0" layoutY="175.0" mnemonicParsing="false" onAction="#getClientConnect" text="Connect" />
             <Text layoutX="20.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port Number:" wrappingWidth="71.99999809265137" />
             <Text layoutX="37.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP Adress: " />
-            <TextField layoutX="117.0" layoutY="56.0" />
+            <TextField fx:id="ClientPortNum" layoutX="117.0" layoutY="56.0" />
             <TextField fx:id="ClientIPAddress" layoutX="117.0" layoutY="99.0" />
       </children>
     </AnchorPane>
