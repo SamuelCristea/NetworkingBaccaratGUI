@@ -20,10 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class GuiBaccarat extends Application{
+public class GuiBaccaratClient extends Application{
 
 	
-	TextField s1,s2,s3,s4, c1;
+	public TextField s1,s2,s3,s4, c1;
 	Button serverChoice,clientChoice,b1;
 	HashMap<String, Scene> sceneMap;
 	GridPane grid;
@@ -32,12 +32,15 @@ public class GuiBaccarat extends Application{
 	Scene startScene;
 	BorderPane startPane;
 	Server serverConnection;
-	Client clientConnection;
-	
-	ListView<String> listItems, listItems2;
+	public Client clientConnection;
 	
 	@FXML
-	ListView<String> ServerView;
+	public TextField ClientIPAddress;
+	
+	@FXML
+	private Button ConnectButton;
+	
+	ListView<String> listItems, listItems2;
 	
 	
 	public static void main(String[] args) {
@@ -50,22 +53,20 @@ public class GuiBaccarat extends Application{
 		// TODO Auto-generated method stub
 		Parent root = FXMLLoader.load(getClass().getResource("main.FXML"));
 		Scene scene = new Scene(root, 500, 300); 
-		primaryStage.setTitle("Baccarat");
+		primaryStage.setTitle("BaccaratClients");
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();
 		
 		listItems = new ListView<String>();
 		listItems2 = new ListView<String>();
-		ServerView = new ListView<String>();
 		
-		serverConnection = new Server(data -> {
-			Platform.runLater(()->{
-				ServerView.getItems().add(data.toString());
+		clientConnection = new Client(data->{
+			Platform.runLater(()->{listItems2.getItems().add(data.toString());
+							});
 			});
-
-		});
-		
+			
+		clientConnection.start();
 		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -162,5 +163,10 @@ public class GuiBaccarat extends Application{
 		
 	}*/
 
+	}
+	public void getMessage() {
+		System.out.println("hit");
+		clientConnection.send(ClientIPAddress.getText());
+		System.out.println("hit2");
 	}
 }
