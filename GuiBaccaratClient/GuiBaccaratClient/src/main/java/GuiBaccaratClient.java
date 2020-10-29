@@ -1,4 +1,3 @@
-
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -73,6 +72,8 @@ public class GuiBaccaratClient extends Application{
         });
 
 	}
+	
+	//when the user types in the data and presses the Connect button, we enter it in to connect to that server specified
 	public void getClientConnect() {
 		String portnum = ClientPortNum.getText();
 		String ipaddy = ClientIPAddress.getText();
