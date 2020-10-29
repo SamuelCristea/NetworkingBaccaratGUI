@@ -64,13 +64,6 @@ public class GuiBaccaratClient extends Application{
 		listItems = new ListView<String>();
 		listItems2 = new ListView<String>();
 		
-		clientConnection = new Client(data->{
-			Platform.runLater(()->{listItems2.getItems().add(data.toString());
-							});
-			});
-			
-		clientConnection.start();
-		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
@@ -85,10 +78,13 @@ public class GuiBaccaratClient extends Application{
 		String ipaddy = ClientIPAddress.getText();
 
 		clientConnection = new Client(data->{
-			Platform.runLater(()->{listItems2.getItems().add(data.toString());
+			Platform.runLater(()->{;   // this is commented --> listItems2.getItems().add(data.toString())
 							});
 			});
+			
+		
 		
 		clientConnection.sendToClient(portnum, ipaddy);
+		clientConnection.start();
 	}
 }
