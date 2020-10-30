@@ -44,6 +44,8 @@ public class GuiBaccaratClient extends Application{
 	
 	ListView<String> listItems, listItems2;
 	
+	Stage stage;
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -55,10 +57,12 @@ public class GuiBaccaratClient extends Application{
 		// TODO Auto-generated method stub
 		Parent root = FXMLLoader.load(getClass().getResource("main.FXML"));
 		Scene scene = new Scene(root, 300, 300); 
-		primaryStage.setTitle("BaccaratClients");
+		stage = new Stage();
+		primaryStage.setTitle("Connect to the Server");
 		primaryStage.setScene(scene);
+		stage = primaryStage;
 		
-		primaryStage.show();
+		stage.show();
 		
 		listItems = new ListView<String>();
 		listItems2 = new ListView<String>();
@@ -74,7 +78,7 @@ public class GuiBaccaratClient extends Application{
 	}
 	
 	//when the user types in the data and presses the Connect button, we enter it in to connect to that server specified
-	public void getClientConnect() {
+	public void getClientConnect() throws Exception{
 		String portnum = ClientPortNum.getText();
 		String ipaddy = ClientIPAddress.getText();
 
@@ -87,5 +91,17 @@ public class GuiBaccaratClient extends Application{
 		
 		clientConnection.sendToClient(portnum, ipaddy);
 		clientConnection.start();
+		
+		if (clientConnection.isAlive()) {
+			Parent mainWindow = FXMLLoader.load(getClass().getResource("ClientGUI.fxml"));
+			Scene scene = new Scene(mainWindow, 600, 400);
+			Stage newStage = new Stage();
+			newStage.setTitle("Baccarat");
+			newStage.setScene(scene);
+			newStage.show();
+			this.stage.close();
+		} else {
+			ErrorBox error = new ErrorBox(3);
+		}
 	}
 }

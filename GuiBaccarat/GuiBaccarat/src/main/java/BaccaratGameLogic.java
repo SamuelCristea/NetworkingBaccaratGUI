@@ -12,6 +12,7 @@ public class BaccaratGameLogic {
 		boolean hand1WinCond = false;
 		boolean hand2WinCond = false;
 		
+		//check which hands have reached the natural state, if at all
 		if (hand1Val == 8 || hand1Val == 9) {
 			hand1WinCond = true;
 		}
@@ -20,14 +21,16 @@ public class BaccaratGameLogic {
 			hand2WinCond = true;
 		}
 		
+		//both hands are naturals
 		if (hand1WinCond == true && hand2WinCond == true) {
 			return "Tie";
-		} else if (hand1WinCond == true && hand2WinCond == false) {
+		} else if (hand1WinCond == true && hand2WinCond == false) {//player's hand is natural
 			return "Hand 1";
-		} else if (hand1WinCond == false && hand2WinCond == true) {
+		} else if (hand1WinCond == false && hand2WinCond == true) {//dealer's hand is natural
 			return "Hand 2";
 		}
 		
+		//now we check if the player/dealer can draw another card, since that would mean that we arent done
 		if (evaluatePlayerDraw(hand1)) {
 			return "No Win Yet";
 		}
@@ -36,20 +39,24 @@ public class BaccaratGameLogic {
 			return "No Win Yet";
 		}
 		
-		if (hand1Val == hand2Val) {
+		//after exhausting our options otherwise, we check for who is the closest to 9
+		
+		if (hand1Val == hand2Val) {//the hands are equally as far from 9
 			return "Tie";
-		} else if (hand1Val > hand2Val) {
+		} else if (hand1Val > hand2Val) {//the player's hand is closer than the dealers
 			return "Hand 1";
-		} else {
+		} else {//the dealer's hand is closer than the players
 			return "Hand 2";
 		}
 	}
 	
+	//counts up the total value of the hand, independent of who's hand it belongs to
 	public int handTotal(ArrayList<Card> hand) {
 		int totalHandVal = 0;
 		
+		//go through the whole hand and count the values of the cards
 		for (Card card : hand) {
-			switch (card.value) {
+			switch (card.value) {//card nums 1-9 are counted as normal (Ace == 1)
 			case 1:
 			case 2:
 			case 3:
@@ -61,7 +68,7 @@ public class BaccaratGameLogic {
 			case 9:
 				totalHandVal += card.value;
 				break;
-			case 10:
+			case 10://all cards nums/types after 9 are not to be counted towards the total, so we add 0 to it
 			case 11:
 			case 12: 
 			case 13:
@@ -69,6 +76,8 @@ public class BaccaratGameLogic {
 				break;
 			
 			}
+			//whenever the hand gets larger than 9, we bring it back down to the acceptable value
+			//i.e. a hand value of 15 gets brought down to 5
 			if (totalHandVal > 9) {
 				totalHandVal -= 10;
 			}
@@ -76,12 +85,18 @@ public class BaccaratGameLogic {
 		return totalHandVal;
 	}
 	
+	//determines if the banker is able to draw, and checks if the special cases allow them to draw
 	public boolean evaluateBankerDraw(ArrayList<Card> hand, Card playerCard) {
 		
-		if (handTotal(hand) >= 7) {
+		int totalHand = handTotal(hand);
+		
+		//when the hand total is at/larger than 7, the dealer cannot draw
+		if (totalHand >= 7) {
 			return false;
 		} 
 		
+		//we get the first 2 cards in the dealer's deck and evaluate what value they are
+		//Reminder, 10/Jack/Queen?King == 0
 		Card card1 = hand.get(0);
 		Card card2 = hand.get(1);
 		
@@ -101,41 +116,57 @@ public class BaccaratGameLogic {
 		
 		int totalOf2Cards = firstCardInHand + secondCardInHand;
 		
+		//the only way that the dealer can draw another card is as if the first two cards in the hand add up to zero
+		//then we must see the last card the player drew and the value of the dealer's
+		//hand to determine if the dealer can draw a card, where Y means that the dealer can draw
+		//Table of when the dealer can draw:
+		//      Player's Last Drawn Card
+		//Bank | N | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+		//   9 |___|___|___|___|___|___|___|___|___|___|___
+	    //   8 |___|___|___|___|___|___|___|___|___|___|___
+		//   7 |___|___|___|___|___|___|___|___|___|___|___
+		//   6 |___|___|___|___|___|___|___|_Y_|_Y_|___|___
+		//   5 |_Y_|___|___|___|___|_Y_|_Y_|_Y_|_Y_|___|___
+		//   4 |_Y_|___|___|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|___|___
+		//   3 |_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|___|_Y_
+		//   2 |_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_
+		//   1 |_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_
+		//   0 |_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_|_Y_
 		if (totalOf2Cards == 0) {
 			if (playerCard == null) {
 				return true;
 			} else {
 				switch(playerCard.value) {
 				case 1:
-					if (handTotal(hand) <= 3) {
+					if (totalHand <= 3) {
 						return true;
 					}
 					break;
 				case 2:
 				case 3:
-					if (handTotal(hand) <= 4) {
+					if (totalHand <= 4) {
 						return true;
 					}
 					break;
 				case 4:
 				case 5:
-					if (handTotal(hand) <= 5) {
+					if (totalHand <= 5) {
 						return true;
 					}
 					break;
 				case 6:
 				case 7:
-					if (handTotal(hand) <= 6) {
+					if (totalHand <= 6) {
 						return true;
 					}
 					break;
 				case 8:
-					if (handTotal(hand) <= 2) {
+					if (totalHand <= 2) {
 						return true;
 					}
 					break;
 				case 9:
-					if (handTotal(hand) <= 3) {
+					if (totalHand <= 3) {
 						return true;
 					}
 					break;
@@ -143,7 +174,7 @@ public class BaccaratGameLogic {
 				case 11:
 				case 12:
 				case 13:
-					if (handTotal(hand) <= 3) {
+					if (totalHand <= 3) {
 						return true;
 					}
 					break;
@@ -154,6 +185,8 @@ public class BaccaratGameLogic {
 		return false;
 	}
 	
+	//tells if the player is able to draw another card, no special cases here, just if the player's hand is
+	//6 or bigger that they are not able to
 	public boolean evaluatePlayerDraw(ArrayList<Card> hand) {
 		
 		int playerHandValue = handTotal(hand);

@@ -37,7 +37,7 @@ public class ErrorBox {
 				uDonGoofed.setText("Invalid Port Number");
 				break;
 			case (3):
-				//uDonGoofed.setText("Can't gamble yet, please enter in " + playSpots + " numbers to continue");
+				uDonGoofed.setText("Could not connect to that server, try another one");
 				break;
 			case (4):
 				uDonGoofed.setText("Press Start Before Running the Program");
