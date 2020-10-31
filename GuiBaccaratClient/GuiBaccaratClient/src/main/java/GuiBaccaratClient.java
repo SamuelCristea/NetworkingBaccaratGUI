@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 public class GuiBaccaratClient extends Application{
@@ -74,6 +75,8 @@ public class GuiBaccaratClient extends Application{
                 System.exit(0);
             }
         });
+		
+		startScene = primaryStage.getScene();
 
 	}
 	
@@ -93,13 +96,13 @@ public class GuiBaccaratClient extends Application{
 		clientConnection.start();
 		
 		if (clientConnection.isAlive()) {
-			Parent mainWindow = FXMLLoader.load(getClass().getResource("ClientGUI.fxml"));
-			Scene scene = new Scene(mainWindow, 600, 400);
-			Stage newStage = new Stage();
-			newStage.setTitle("Baccarat");
-			newStage.setScene(scene);
-			newStage.show();
-			this.stage.close();
+			Window window = ConnectButton.getScene().getWindow();
+			if(window instanceof Stage) {
+				Parent mainWindow = FXMLLoader.load(getClass().getResource("ClientGUI.fxml"));
+				Scene scene = new Scene(mainWindow, 600, 400);
+				stage = (Stage) window;
+				stage.setScene(scene);
+			}			
 		} else {
 			ErrorBox error = new ErrorBox(3);
 		}
