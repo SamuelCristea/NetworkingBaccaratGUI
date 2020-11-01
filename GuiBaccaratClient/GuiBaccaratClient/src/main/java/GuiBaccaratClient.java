@@ -37,6 +37,8 @@ public class GuiBaccaratClient extends Application{
 	Server serverConnection;
 	public Client clientConnection;
 	
+	//Connection Screen elements
+	//-------------------------------------------------------------------------
 	@FXML
 	public TextField ClientIPAddress;
 	
@@ -45,7 +47,10 @@ public class GuiBaccaratClient extends Application{
 	
 	@FXML
 	public TextField ClientPortNum;
+	//-------------------------------------------------------------------------
 	
+	//Main Screen elements
+	//-------------------------------------------------------------------------
 	@FXML
 	private MenuItem betYourself;
 	
@@ -57,13 +62,34 @@ public class GuiBaccaratClient extends Application{
 
 	@FXML
 	private Button quit;
+	//-------------------------------------------------------------------------
+	
+	//Warning Screen Buttons
+	//-------------------------------------------------------------------------
+	@FXML
+	private Button yesClose;
+	
+	@FXML
+	private Button noClose;
+	//-------------------------------------------------------------------------
+	
+	//Betting Screen elements
+	//-------------------------------------------------------------------------
+	@FXML
+	private Button confirmBet;
+	
+	@FXML
+	private TextField betAmt;
+	//-------------------------------------------------------------------------
 	
 	ListView<String> listItems, listItems2;
 	
 	Stage stage;
+	Stage amtStage;
 	
 	private Pair<String,Integer> betBundle;
 	private boolean hasBet = false;
+	private String typeOfBet = "";
 	
 	
 	public static void main(String[] args) {
@@ -77,6 +103,7 @@ public class GuiBaccaratClient extends Application{
 		Parent root = FXMLLoader.load(getClass().getResource("main.FXML"));
 		Scene scene = new Scene(root, 300, 300); 
 		stage = new Stage();
+		amtStage = new Stage();
 		primaryStage.setTitle("Connect to the Server");
 		primaryStage.setScene(scene);
 		stage = primaryStage;
@@ -129,19 +156,138 @@ public class GuiBaccaratClient extends Application{
 	//these next 3 functions open up the betting screens, and they will bet on what option they selected in the dropdown
 	//-------------------------------------------------------
 	public void displayYourselfScreen() throws IOException {
-		BetAmountWindow baw = new BetAmountWindow(1,betBundle);
-		
-	}
+		if (!hasBet) {
+			try {
+				betWindow(1);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			ErrorBox e = new ErrorBox(5);
+		}
+			
+	 }
 	
 	public void displayBankerScreen() throws IOException {
-		BetAmountWindow baw = new BetAmountWindow(2,betBundle);
+		if (!hasBet) {
+			try {
+				betWindow(2);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			ErrorBox e = new ErrorBox(5);
+		}
+			
+	 }
 		
-	}
 	
 	public void displayTieScreen() throws IOException {
-		BetAmountWindow baw = new BetAmountWindow(3,betBundle);
+		if (!hasBet) {
+			try {
+				betWindow(3);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			ErrorBox e = new ErrorBox(5);
+		}
+			
+	 }
 		
-	}
 	//-------------------------------------------------------
+	
+	public void quitButton() {
+		System.exit(0);
+	}
+	
+	//the betting window, sans being in a separate class since thats dumb apparently
+	//-------------------------------------------------------------------------------------------
+	public void betWindow(int betFrom) throws Exception {
+		Parent root = FXMLLoader.load(getClass().getResource("Amt2Bet.fxml"));
+		Scene scene = new Scene(root, 300, 150);
+		Stage warningStage = new Stage();
+		amtStage = new Stage();
+		if (betFrom == 1) {
+			amtStage.setTitle("Bet on Yourself");
+			typeOfBet = "Self";
+		} else if (betFrom == 2) {
+			amtStage.setTitle("Bet on Banker");
+			typeOfBet = "Banker";
+		} else if (betFrom == 3) {
+			amtStage.setTitle("Bet on Draw");
+			typeOfBet = "Draw";
+		}
+		
+		
+		amtStage.setScene(scene);
+		amtStage = this.amtStage;
+		amtStage.show();
+		
+		amtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent event) {
+				// TODO Auto-generated method stub
+				try {
+					if (!hasBet) {
+						try {
+							Parent root = FXMLLoader.load(getClass().getResource("WarningSansBet.fxml"));
+							Scene scene = new Scene(root, 200, 100);
+						
+							warningStage.setTitle("Confirm?");
+							warningStage.setScene(scene);
+							warningStage.show();
+						
+							warningStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+								@Override
+								public void handle(WindowEvent event) {
+									warningStage.close();
+								}
+							
+							});
+						
+						
+							//buttons between the lines handle the issues when it comes to closing the warning screen when needed
+							//----------------------------------------------------------------------------------
+							yesClose.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									warningStage.close();
+									amtStage.close();
+								}
+							});
+						
+							noClose.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									warningStage.close();
+								}
+							});
+							//--------------------------------------------------------------------------------------
+						} catch (IOException e) {
+								e.printStackTrace();
+						}
+				} else {
+					amtStage.close();
+				}
+			} catch (Exception e) {}
+			
+			}});;
+
+	}
+	//-------------------------------------------------------------------------------------------
+	
+	public void sendAmountBet() {
+		//grab the amount bet and package it as a pair
+		int cashBet = Integer.parseInt(betAmt.getText());
+		if (cashBet < 0) {//check the bet and make sure it is valid
+			cashBet = 0;
+		}
+		betBundle = new Pair<String,Integer>(this.typeOfBet,cashBet);
+		hasBet = true;
+		betAmt.setText("Bet Recorded, Please exit :)");
+	}
 
 }

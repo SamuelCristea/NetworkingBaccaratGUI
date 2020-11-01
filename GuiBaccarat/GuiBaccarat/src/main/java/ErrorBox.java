@@ -42,7 +42,11 @@ public class ErrorBox {
 			case (4):
 				uDonGoofed.setText("Please enter a non-negative and non-zero value for the bet");
 				break;
+			case (5):
+				uDonGoofed.setText("You have already bet, you must start the game");
+				break;
 			}
+			
 			
 			//assemble the screen
 			BorderPane bp = new BorderPane();
