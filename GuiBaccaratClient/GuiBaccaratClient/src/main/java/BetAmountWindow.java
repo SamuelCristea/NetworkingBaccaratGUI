@@ -31,9 +31,11 @@ public class BetAmountWindow {
 	
 	private boolean hasBetBeenSent = false;
 	
+	private Pair<String,Integer> b;
+	
 	String typeOfBet;
 	
-	public BetAmountWindow(int typeOfBet) throws IOException {
+	public BetAmountWindow(int typeOfBet, Pair<String,Integer> bBun) throws IOException {
 		
 		Parent root = FXMLLoader.load(getClass().getResource("Amt2Bet.fxml"));
 		Scene scene = new Scene(root, 600, 227);
@@ -49,6 +51,8 @@ public class BetAmountWindow {
 			s.setTitle("Bet on Draw");
 			this.typeOfBet = "Draw";
 		}
+		
+		this.b = bBun;
 		
 		s.setScene(scene);
 		s.show();
@@ -95,16 +99,14 @@ public class BetAmountWindow {
 	}
 	//--------------------------------------------------------------------------------------
 	
-	public Pair<String,Integer> sendAmountBet() {
+	public void sendAmountBet() {
 		//grab the amount bet and package it as a pair
 		int cashBet = Integer.parseInt(betAmt.getText());
 		if (cashBet < 0) {//check the bet and make sure it is valid
 			cashBet = 0;
 		}
-		Pair<String,Integer> betBundle = new Pair<String,Integer>(this.typeOfBet,cashBet);
-		//s.close();
+		b = new Pair<String,Integer>(this.typeOfBet,cashBet);
 		hasBetBeenSent = true;
-		return betBundle;
 	}
 	
 	public void weDoneHere() {
