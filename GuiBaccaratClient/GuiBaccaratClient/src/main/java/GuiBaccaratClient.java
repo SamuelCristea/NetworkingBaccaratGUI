@@ -223,13 +223,7 @@ public class GuiBaccaratClient extends Application{
 		amtStage.setScene(scene);
 		amtStage = this.amtStage;
 		amtStage.show();
-		
-		amtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-		@Override
-		public void handle(WindowEvent event) {
-				amtStage.close();
-		}
+	}
 	//-------------------------------------------------------------------------------------------
 	
 	public void sendAmountBet() {
@@ -238,9 +232,11 @@ public class GuiBaccaratClient extends Application{
 		if (cashBet < 0) {//check the bet and make sure it is valid
 			cashBet = 0;
 		}
-		betBundle = new Pair<String,Integer>(this.typeOfBet,cashBet);
+		betBundle = new Pair<String,Integer>(typeOfBet,cashBet);
 		hasBet = true;
 		betAmt.setText("Bet Recorded, Please exit :)");
 	}
 
-}
+	
+	}
+
