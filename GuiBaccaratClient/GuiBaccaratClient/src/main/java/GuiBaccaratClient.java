@@ -62,15 +62,9 @@ public class GuiBaccaratClient extends Application{
 
 	@FXML
 	private Button quit;
-	//-------------------------------------------------------------------------
-	
-	//Warning Screen Buttons
-	//-------------------------------------------------------------------------
-	@FXML
-	private Button yesClose;
 	
 	@FXML
-	private Button noClose;
+	private Button startButton;
 	//-------------------------------------------------------------------------
 	
 	//Betting Screen elements
@@ -234,9 +228,10 @@ public class GuiBaccaratClient extends Application{
 		}
 		betBundle = new Pair<String,Integer>(typeOfBet,cashBet);
 		hasBet = true;
-		betAmt.setText("Bet Recorded, Please exit :)");
+		betAmt.setText("Bet Recorded, Please exit");
+		confirmBet.setDisable(true);
 	}
 
 	
-	}
+}
 
