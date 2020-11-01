@@ -25,9 +25,9 @@ public class BaccaratGameLogic {
 		if (hand1WinCond == true && hand2WinCond == true) {
 			return "Tie";
 		} else if (hand1WinCond == true && hand2WinCond == false) {//player's hand is natural
-			return "Hand 1";
+			return "Player";
 		} else if (hand1WinCond == false && hand2WinCond == true) {//dealer's hand is natural
-			return "Hand 2";
+			return "Banker";
 		}
 		
 		//now we check if the player/dealer can draw another card, since that would mean that we arent done
@@ -44,9 +44,9 @@ public class BaccaratGameLogic {
 		if (hand1Val == hand2Val) {//the hands are equally as far from 9
 			return "Tie";
 		} else if (hand1Val > hand2Val) {//the player's hand is closer than the dealers
-			return "Hand 1";
+			return "Player";
 		} else {//the dealer's hand is closer than the players
-			return "Hand 2";
+			return "Banker";
 		}
 	}
 	

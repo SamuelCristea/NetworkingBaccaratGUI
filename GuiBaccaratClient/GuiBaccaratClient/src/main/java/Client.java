@@ -25,6 +25,7 @@ public class Client extends Thread{
 		callback = call;
 	}
 	
+	@Override
 	public void run() {
 		System.out.println("We in here after all run's calls-- BEFORE-BEFORE TRY");
 		
@@ -54,8 +55,6 @@ public class Client extends Thread{
 	public void sendToClient(String PortNum, String IPAddress) {
 		this.ip = IPAddress;
 		this.p = Integer.parseInt(PortNum);
-		//run();
-		//System.out.println("did we pass run??");
 	}
 	
 	public void send(String data) {

@@ -103,7 +103,7 @@ public class Server{
 					    	
 					    	}
 					    catch(Exception e) {
-					    	callback.accept("OOOOPPs...Something wrong with the socket from client: " + count + "....closing down!");
+					    	callback.accept("Client: " + count + " has disconnected");
 					    	updateClients("Client #"+count+" has left the server!");
 					    	clients.remove(this);
 					    	break;
@@ -117,6 +117,10 @@ public class Server{
 
 		public void setPortNum(String pn) {
 				portnum = Integer.valueOf(pn);
+		}
+		
+		public int getNumClientsConnected() {
+			return clients.size();
 		}
 }
 

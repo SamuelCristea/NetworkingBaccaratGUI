@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.HashMap;
 
 import javafx.application.Application;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import javafx.util.Pair;
 
 public class GuiBaccaratClient extends Application{
 
@@ -43,9 +46,24 @@ public class GuiBaccaratClient extends Application{
 	@FXML
 	public TextField ClientPortNum;
 	
+	@FXML
+	private MenuItem betYourself;
+	
+	@FXML
+	private MenuItem betBanker;
+	
+	@FXML
+	private MenuItem betTie;
+
+	@FXML
+	private Button quit;
+	
 	ListView<String> listItems, listItems2;
 	
 	Stage stage;
+	
+	private Pair<String,Integer> betBundle;
+	private boolean hasBet = false;
 	
 	
 	public static void main(String[] args) {
@@ -107,4 +125,23 @@ public class GuiBaccaratClient extends Application{
 			ErrorBox error = new ErrorBox(3);
 		}
 	}
+	
+	//these next 3 functions open up the betting screens, and they will bet on what option they selected in the dropdown
+	//-------------------------------------------------------
+	public void displayYourselfScreen() throws IOException {
+		BetAmountWindow baw = new BetAmountWindow(1,betBundle);
+		
+	}
+	
+	public void displayBankerScreen() throws IOException {
+		BetAmountWindow baw = new BetAmountWindow(2,betBundle);
+		
+	}
+	
+	public void displayTieScreen() throws IOException {
+		BetAmountWindow baw = new BetAmountWindow(3,betBundle);
+		
+	}
+	//-------------------------------------------------------
+
 }

@@ -7,8 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BetAmountWindow">
    <children>
       <AnchorPane prefHeight="227.0" prefWidth="600.0">
          <children>
@@ -18,7 +17,7 @@
                </font>
             </Text>
             <TextField layoutX="76.0" layoutY="66.0" />
-            <Button layoutX="134.0" layoutY="108.0" mnemonicParsing="false" text="OK" />
+            <Button fx:id="confirmBet" layoutX="134.0" layoutY="108.0" mnemonicParsing="false" onAction="#weDoneHere" text="OK" />
          </children>
       </AnchorPane>
    </children>

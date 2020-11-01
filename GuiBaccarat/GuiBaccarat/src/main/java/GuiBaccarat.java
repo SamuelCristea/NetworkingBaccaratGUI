@@ -13,12 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -39,6 +42,9 @@ public class GuiBaccarat extends Application{
 	ListView<String> listItems, listItems2;
 	
 	@FXML
+	MenuButton clientList;
+	
+	@FXML
 	ListView<String> ServerView;
 	
 	@FXML
@@ -47,9 +53,13 @@ public class GuiBaccarat extends Application{
 	@FXML
 	TextField ServerPortNum;
 	
+	@FXML
+	Text numClientsConnected;
+	
 	boolean wasPwrButtonPressed = false;
 	boolean prevPortUsed = false;
 	String pn;
+	int totalClients = 0;
 	
 	
 	public static void main(String[] args) {
@@ -71,6 +81,9 @@ public class GuiBaccarat extends Application{
 		listItems2 = new ListView<String>();
 		ServerView = new ListView<String>();
 		pwrButton = new ToggleButton();
+		if (clientList == null)
+			System.out.println("REEEEEEEEEEEEEE");
+		clientList = new MenuButton();
 		
 		
 		
@@ -119,8 +132,50 @@ public class GuiBaccarat extends Application{
 		serverConnection = new Server(data -> {
 			Platform.runLater(()->{
 				ServerView.getItems().add(data.toString());
+				updateClientsConnected();
 			});
 
 		},p);
+		
+	}
+	
+	//updates the count of the clients connected and makes an info page for each player's stats
+	private void updateClientsConnected() {
+		int currentClientsConnected = serverConnection.getNumClientsConnected();
+		if (totalClients != currentClientsConnected) {
+			numClientsConnected.setText(String.valueOf(currentClientsConnected));
+			addInNewClient();
+			totalClients = currentClientsConnected;
+		}
+	}
+	
+	//makes the client info page whenever a new client connects
+	private void addInNewClient() {
+		int currentClientCount = serverConnection.getNumClientsConnected();
+		if (totalClients < currentClientCount) {
+			MenuItem mi = new MenuItem("Client #" + String.valueOf(currentClientCount));
+			mi.setOnAction(new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent event) {
+					try {
+						Stage clientInfo = new Stage();
+						Parent root = FXMLLoader.load(getClass().getResource("ClientInfo.fxml"));
+						Scene scene = new Scene(root, 400, 400);
+						clientInfo.setTitle("Client #" + String.valueOf(currentClientCount) + "'s Information");
+						clientInfo.setScene(scene);
+						clientInfo.show();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+			});
+			if (clientList == null)
+				System.out.println("Da fuq");
+			clientList.getItems().add(mi);
+		} 
 	}
 }
