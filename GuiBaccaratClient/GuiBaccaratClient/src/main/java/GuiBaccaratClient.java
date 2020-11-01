@@ -226,57 +226,10 @@ public class GuiBaccaratClient extends Application{
 		
 		amtStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-			@Override
-			public void handle(WindowEvent event) {
-				// TODO Auto-generated method stub
-				try {
-					if (!hasBet) {
-						try {
-							Parent root = FXMLLoader.load(getClass().getResource("WarningSansBet.fxml"));
-							Scene scene = new Scene(root, 200, 100);
-						
-							warningStage.setTitle("Confirm?");
-							warningStage.setScene(scene);
-							warningStage.show();
-						
-							warningStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-								@Override
-								public void handle(WindowEvent event) {
-									warningStage.close();
-								}
-							
-							});
-						
-						
-							//buttons between the lines handle the issues when it comes to closing the warning screen when needed
-							//----------------------------------------------------------------------------------
-							yesClose.setOnAction(new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent event) {
-									warningStage.close();
-									amtStage.close();
-								}
-							});
-						
-							noClose.setOnAction(new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent event) {
-									warningStage.close();
-								}
-							});
-							//--------------------------------------------------------------------------------------
-						} catch (IOException e) {
-								e.printStackTrace();
-						}
-				} else {
-					amtStage.close();
-				}
-			} catch (Exception e) {}
-			
-			}});;
-
-	}
+		@Override
+		public void handle(WindowEvent event) {
+				amtStage.close();
+		}
 	//-------------------------------------------------------------------------------------------
 	
 	public void sendAmountBet() {
