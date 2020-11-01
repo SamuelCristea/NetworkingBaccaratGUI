@@ -1,6 +1,6 @@
 import java.io.IOException;
 import javafx.util.Pair;
-
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class BetAmountWindow {
+public class BetAmountWindow{
 	
 	@FXML
 	private Button confirmBet;
@@ -31,11 +31,9 @@ public class BetAmountWindow {
 	
 	private boolean hasBetBeenSent = false;
 	
-	private Pair<String,Integer> b;
+	public String typeOfBet;
 	
-	String typeOfBet;
-	
-	public BetAmountWindow(int typeOfBet, Pair<String,Integer> bBun) throws IOException {
+	public BetAmountWindow(int typeOfBet,Pair<String,Integer> bBun) throws IOException{
 		
 		Parent root = FXMLLoader.load(getClass().getResource("Amt2Bet.fxml"));
 		Scene scene = new Scene(root, 600, 227);
@@ -51,8 +49,6 @@ public class BetAmountWindow {
 			s.setTitle("Bet on Draw");
 			this.typeOfBet = "Draw";
 		}
-		
-		this.b = bBun;
 		
 		s.setScene(scene);
 		s.show();
@@ -85,6 +81,23 @@ public class BetAmountWindow {
 			}
 			
 		});;
+		
+		confirmBet.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				int cashBet = Integer.parseInt(betAmt.getText());
+				if (cashBet <= 0) {
+					ErrorBox e = new ErrorBox(4);
+					betAmt.setText("");
+				} else {
+					bBun = new Pair<String, Integer>(String.valueOf(typeOfBet),cashBet);
+				}
+				
+			}
+			
+		});
 	}
 	
 	//buttons between the lines handle the issues when it comes to closing the screen when needed
@@ -105,7 +118,7 @@ public class BetAmountWindow {
 		if (cashBet < 0) {//check the bet and make sure it is valid
 			cashBet = 0;
 		}
-		b = new Pair<String,Integer>(this.typeOfBet,cashBet);
+		bBun = new Pair<String,Integer>(this.typeOfBet,cashBet);
 		hasBetBeenSent = true;
 	}
 	

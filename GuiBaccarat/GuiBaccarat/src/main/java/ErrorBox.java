@@ -40,7 +40,7 @@ public class ErrorBox {
 				uDonGoofed.setText("Please enter an amount to bet");
 				break;
 			case (4):
-				uDonGoofed.setText("Press Start Before Running the Program");
+				uDonGoofed.setText("Please enter a non-negative and non-zero value for the bet");
 				break;
 			}
 			
