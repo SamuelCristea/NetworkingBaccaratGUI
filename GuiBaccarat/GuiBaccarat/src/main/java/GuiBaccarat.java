@@ -60,6 +60,7 @@ public class GuiBaccarat extends Application{
 	boolean prevPortUsed = false;
 	String pn;
 	int totalClients = 0;
+	BaccaratGame g;
 	
 	
 	public static void main(String[] args) {
@@ -84,8 +85,8 @@ public class GuiBaccarat extends Application{
 		if (clientList == null)
 			System.out.println("REEEEEEEEEEEEEE");
 		clientList = new MenuButton();
-		
-		
+		g = new BaccaratGame();
+		g.evaluateWinnings();
 		
 		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -118,6 +119,7 @@ public class GuiBaccarat extends Application{
 				} else {
 					serverOpen();
 					wasPwrButtonPressed = true;
+					
 				}
 				
 			} else {

@@ -23,9 +23,9 @@ public class BaccaratGameLogic {
 		
 		//both hands are naturals
 		if (hand1WinCond == true && hand2WinCond == true) {
-			return "Tie";
+			return "Draw";
 		} else if (hand1WinCond == true && hand2WinCond == false) {//player's hand is natural
-			return "Player";
+			return "Self";
 		} else if (hand1WinCond == false && hand2WinCond == true) {//dealer's hand is natural
 			return "Banker";
 		}
@@ -42,9 +42,9 @@ public class BaccaratGameLogic {
 		//after exhausting our options otherwise, we check for who is the closest to 9
 		
 		if (hand1Val == hand2Val) {//the hands are equally as far from 9
-			return "Tie";
+			return "Draw";
 		} else if (hand1Val > hand2Val) {//the player's hand is closer than the dealers
-			return "Player";
+			return "Self";
 		} else {//the dealer's hand is closer than the players
 			return "Banker";
 		}
@@ -195,6 +195,13 @@ public class BaccaratGameLogic {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean isNaturalHand(ArrayList<Card> hand) {
+		if (handTotal(hand) == 9 || handTotal(hand) == 8) {
+			return true;
+		}
+		return false;
 	}
 
 }

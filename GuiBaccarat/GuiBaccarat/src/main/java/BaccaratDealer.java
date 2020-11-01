@@ -5,11 +5,17 @@ public class BaccaratDealer {
 	
 	public ArrayList<Card> deck;
 	
+	public BaccaratDealer() {
+		generateDeck();
+	}
+	
 	//generates a deck of 52 cards, generated as if it was an "unopened" deck
 	public void generateDeck() {
+		deck = new ArrayList<Card>();
+		String[] suitNames = {"Spade","Heart","Club","Diamond"};
 		for (int i = 0; i < 4; ++i) {//4 being the number of suits in a deck of cards
 			for (int j = 0; j < 13; ++j) {//13 representing the possible values of cards, 11 = jack, 12 = queen, 13 = king
-				Card newCard = new Card(String.valueOf(j+1),i+1);
+				Card newCard = new Card(suitNames[i],j);
 				deck.add(newCard);
 			}
 		}
