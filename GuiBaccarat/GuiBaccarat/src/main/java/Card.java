@@ -8,7 +8,7 @@ public class Card {
 	
 	public Card(String theSuit, int theValue) {
 		this.suit = theSuit;
-		this.value = theValue + 1;
+		this.value = theValue + 1;//we add one to it to not worry about an ace counting the same as a 10 or King
 	}
 
 }

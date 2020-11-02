@@ -96,7 +96,7 @@ public class BaccaratGameLogic {
 		} 
 		
 		//we get the first 2 cards in the dealer's deck and evaluate what value they are
-		//Reminder, 10/Jack/Queen?King == 0
+		//Reminder, 10/Jack/Queen/King == 0
 		Card card1 = hand.get(0);
 		Card card2 = hand.get(1);
 		

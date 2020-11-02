@@ -81,6 +81,7 @@ public class GuiBaccaratClient extends Application{
 	Stage stage;
 	Stage amtStage;
 	
+	//where we store the data about the bet
 	private Pair<String,Integer> betBundle;
 	private boolean hasBet = false;
 	private String typeOfBet = "";
@@ -191,11 +192,12 @@ public class GuiBaccaratClient extends Application{
 		
 	//-------------------------------------------------------
 	
+	//Quits the client program. Pretty self-explanatory
 	public void quitButton() {
 		System.exit(0);
 	}
 	
-	//the betting window, sans being in a separate class since thats dumb apparently
+	//the betting window, sans being in a separate class since thats dumb apparently and will violently destroy my happiness
 	//-------------------------------------------------------------------------------------------
 	public void betWindow(int betFrom) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("Amt2Bet.fxml"));
@@ -220,12 +222,14 @@ public class GuiBaccaratClient extends Application{
 	}
 	//-------------------------------------------------------------------------------------------
 	
+	//gets the bet from the screen and sends it to the main program, and disables betting again
 	public void sendAmountBet() {
 		//grab the amount bet and package it as a pair
 		int cashBet = Integer.parseInt(betAmt.getText());
 		if (cashBet < 0) {//check the bet and make sure it is valid
 			cashBet = 0;
 		}
+		//creates a key/value pair, where we can track the bet amount and on what the player bet on
 		betBundle = new Pair<String,Integer>(typeOfBet,cashBet);
 		hasBet = true;
 		betAmt.setText("Bet Recorded, Please exit");

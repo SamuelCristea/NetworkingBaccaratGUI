@@ -151,16 +151,17 @@ public class GuiBaccarat extends Application{
 		}
 	}
 	
-	//makes the client info page whenever a new client connects
+	//makes the client info page whenever a new client connects dynamically
 	private void addInNewClient() {
 		int currentClientCount = serverConnection.getNumClientsConnected();
 		if (totalClients < currentClientCount) {
 			MenuItem mi = new MenuItem("Client #" + String.valueOf(currentClientCount));
+			//makes the page itself and fills it with the necessary data
 			mi.setOnAction(new EventHandler<ActionEvent>() {
 
 				@Override
 				public void handle(ActionEvent event) {
-					try {
+					try {//the actual, physical page
 						Stage clientInfo = new Stage();
 						Parent root = FXMLLoader.load(getClass().getResource("ClientInfo.fxml"));
 						Scene scene = new Scene(root, 400, 400);
@@ -175,8 +176,6 @@ public class GuiBaccarat extends Application{
 				}
 				
 			});
-			if (clientList == null)
-				System.out.println("Da fuq");
 			clientList.getItems().add(mi);
 		} 
 	}
