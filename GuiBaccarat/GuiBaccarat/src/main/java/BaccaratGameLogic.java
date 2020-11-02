@@ -197,11 +197,50 @@ public class BaccaratGameLogic {
 		return true;
 	}
 	
+	//determines if a drawn hand is a natural one, used for the beginning draw
 	public boolean isNaturalHand(ArrayList<Card> hand) {
 		if (handTotal(hand) == 9 || handTotal(hand) == 8) {
 			return true;
 		}
 		return false;
+	}
+	
+	//similar to whoWon, but without the option on the player
+	public String whoWasClosest(ArrayList<Card> hand1,ArrayList<Card> hand2) {
+		
+		int hand1Val = handTotal(hand1);
+		int hand2Val = handTotal(hand2);
+		
+		boolean hand1WinCond = false;
+		boolean hand2WinCond = false;
+		
+		//check which hands have reached the natural state, if at all
+		if (hand1Val == 8 || hand1Val == 9) {
+			hand1WinCond = true;
+		}
+		
+		if (hand2Val == 8 || hand2Val == 9) {
+			hand2WinCond = true;
+		}
+		
+		//both hands are naturals
+		if (hand1WinCond == true && hand2WinCond == true) {
+			return "Draw";
+		} else if (hand1WinCond == true && hand2WinCond == false) {//player's hand is natural
+			return "Self";
+		} else if (hand1WinCond == false && hand2WinCond == true) {//dealer's hand is natural
+			return "Banker";
+		}
+		
+		//after exhausting our options otherwise, we check for who is the closest to 9
+		
+		if (hand1Val == hand2Val) {//the hands are equally as far from 9
+			return "Draw";
+		} else if (hand1Val > hand2Val) {//the player's hand is closer than the dealers
+			return "Self";
+		} else {//the dealer's hand is closer than the players
+			return "Banker";
+		}
 	}
 
 }

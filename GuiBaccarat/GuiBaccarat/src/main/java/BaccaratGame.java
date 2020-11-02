@@ -32,19 +32,12 @@ public class BaccaratGame {
 		System.out.println("Who do you bet on: Banker, Draw, or Self?");
 		Scanner sc = new Scanner(System.in);
 		String betOn = sc.next();
+		System.out.println(betOn);
 		
-//		while (betOn != "Banker" || betOn != "Draw" || betOn != "Self") {
-//			System.out.println("Who do you bet on: Banker, Draw, or Self?");
-//			betOn = sc.next();
-//		}
 		
 		System.out.println("How Much To Bet? ");
 		double bet = sc.nextDouble();
-		
-//		while (bet < 0) {
-//			System.out.println("How Much To Bet? ");
-//			bet = sc.nextDouble();
-//		}
+		sc.close();
 		
 		Card lastDrawnbyPlayer = null;
 		
@@ -59,22 +52,38 @@ public class BaccaratGame {
 		BaccaratGameLogic bgl = new BaccaratGameLogic();
 		
 		if (bgl.isNaturalHand(playerHand)) {
+			System.out.println("In the natural section");
+			System.out.println("Self");
+			System.out.println(betOn);
+			System.out.println(betOn == "Self");
 			return calculateWin(bet,betOn,"Self");
 		} else if (bgl.isNaturalHand(bankerHand)) {
+			System.out.println("In the natural section");
+			System.out.println("Banker");
+			System.out.println(betOn);
+			System.out.println(betOn == "Banker");
 			return calculateWin(bet,betOn,"Banker");
 		}
 		
 		String wonYet = bgl.whoWon(playerHand, playerHand);
 		
 		if (wonYet == "Draw") {
+			System.out.println("In the draw section");
+			System.out.println(wonYet);
+			System.out.println(betOn);
+			System.out.println(betOn == wonYet);
 			return calculateWin(bet,betOn,wonYet);
 			
-		} else {
-				if (bgl.evaluatePlayerDraw(playerHand) && theDealer.deckSize() > 0) {
+		} else if (wonYet == "No Win Yet") {
+				if (bgl.evaluatePlayerDraw(playerHand)) {
 					lastDrawnbyPlayer = theDealer.drawOne();
 					playerHand.add(lastDrawnbyPlayer);
 					wonYet = bgl.whoWon(playerHand, playerHand);
-					if (wonYet == "Player") {
+					if (wonYet == "Self") {
+						System.out.println("In the self section");
+						System.out.println(wonYet);
+						System.out.println(betOn);
+						System.out.println(betOn == wonYet);
 						return calculateWin(bet,betOn,wonYet);
 						
 					}
@@ -83,40 +92,66 @@ public class BaccaratGame {
 				if (bgl.evaluateBankerDraw(bankerHand, lastDrawnbyPlayer)) {
 					bankerHand.add(theDealer.drawOne());
 					wonYet = bgl.whoWon(playerHand, playerHand);
-					if (wonYet == "Dealer") {
+					if (wonYet == "Banker") {
+						System.out.println("In the banker section");
+						System.out.println(wonYet);
+						System.out.println(betOn);
+						System.out.println(betOn == wonYet);
 						return calculateWin(bet,betOn,wonYet);
 						
 					}
 				}
 			}
 			
-			wonYet = bgl.whoWon(playerHand, playerHand);
-			return calculateWin(bet,betOn,wonYet);
+			wonYet = bgl.whoWasClosest(playerHand, playerHand);
+			System.out.println("In the closest section");
+			System.out.println(String.valueOf(wonYet));
+			System.out.println(String.valueOf(betOn));
+			System.out.println(String.valueOf(betOn) == String.valueOf(betOn));
+			return calculateWin(bet,String.valueOf(betOn),betOn);
 			
 			
 	}
 	
 	public double calculateWin(double betInit,String betOn,String message) {
 		double winnings = 0;
-		if (message != betOn) {
-			System.out.println("Oh, so sorry, you didnt bet right, you lost your bet");
-			System.out.println("Winnings: $0");
-		} else {
-			if (betOn == "Banker") {
+		String bo = String.valueOf(betOn);
+		String m = message;
+		System.out.println(bo);
+		System.out.println(m);
+		System.out.println("On bo and m being equal: " + (bo == m));
+		System.out.println("On m being Banker: " + (m == "Banker")); 
+		System.out.println("On m being Draw: " + (m == "Draw")); 
+		System.out.println("On m being Self: " + (m == "Self"));
+		
+		if (bo == m) {
+			if (m == "Banker") {
 				winnings = (betInit*2) - (betInit*0.05);
 				System.out.println("You got the right bet! Banker takes 5% as commission tho");
 				System.out.println("Winnings: $" + winnings);
-			} else if (betOn == "Draw") {
-				winnings = betInit * 8;
-				System.out.println("WOW! You guessed right on the draw, and will be specially rewarded");
-				System.out.println("Winnings: $" + winnings);
-			} else {
+				return winnings;
+			}
+			if (m == "Self") {
 				winnings = betInit * 2;
 				System.out.println("Nice Confidence, and it has paid off");
 				System.out.println("Winnings: $" + winnings);
+				return winnings;
 			}
+			if (m == "Draw") {
+				winnings = betInit * 8;
+				System.out.println("WOW! You guessed right on the draw, and will be specially rewarded");
+				System.out.println("Winnings: $" + winnings);
+				return winnings;
+			}
+		} else {
+			 
+			System.out.println("Oh, so sorry, you didnt bet right, you lost your bet");
+			System.out.println("Winnings: $0");
+			return winnings;
 		}
-		return winnings;
+		
+		return 0;
+		
 	}
 
 }
